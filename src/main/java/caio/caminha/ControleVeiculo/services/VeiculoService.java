@@ -6,7 +6,6 @@ import caio.caminha.ControleVeiculo.models.Veiculo;
 import caio.caminha.ControleVeiculo.outputs.OutputVeiculo;
 import caio.caminha.ControleVeiculo.repositories.UsuarioRepository;
 import caio.caminha.ControleVeiculo.repositories.VeiculoRepository;
-import jdk.nashorn.internal.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
