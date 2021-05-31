@@ -30,9 +30,13 @@ public class AutenticacaoController {
     public ResponseEntity<OutputToken> authenticate(@RequestBody @Valid AuthInput input){
         UsernamePasswordAuthenticationToken dadosLogin = input.convert();
 
-            Authentication authentication = authenticationManager.authenticate(dadosLogin);
-            String token = this.tokenService.generateToken(authentication);
-            return ResponseEntity.ok(new OutputToken(token, "Bearer "));
+           try{
+               Authentication authentication = authenticationManager.authenticate(dadosLogin);
+               String token = this.tokenService.generateToken(authentication);
+               return ResponseEntity.ok(new OutputToken(token, "Bearer "));
+           }catch (Exception e){
+               return ResponseEntity.badRequest().build();
+           }
 
     }
 }
