@@ -59,7 +59,7 @@ public class VeiculoService {
 
 
     public OutputVeiculoCarro saveCarro(InputVeiculo input, Usuario usuario) throws VeiculoInvalidoException{
-        try{
+        if(this.validaVeiculo(input)) {
             Veiculo veiculo = input.convert();
 
             this.carroService.montaCarro(veiculo, input, usuario);
@@ -70,14 +70,13 @@ public class VeiculoService {
 
             output.setRodizioAtivo(output.getDiaRodizio().equals(this.weekDay(cal)));
             return output;
-        }catch(Exception e){
-            throw new VeiculoInvalidoException("Não foi possível salvar o Carro no Banco de Dados");
         }
+            throw new VeiculoInvalidoException("Não foi possível salvar o Carro no Banco de Dados");
 
     }
 
     public OutputVeiculo saveMoto(InputVeiculo input, Usuario usuario) throws VeiculoInvalidoException{
-        try{
+        if(this.validaVeiculo(input)){
             Veiculo veiculo = input.convert();
 
             this.motoService.montaMoto(veiculo, input, usuario);
@@ -85,14 +84,13 @@ public class VeiculoService {
             this.veiculoRepository.save(veiculo);
             Calendar cal = Calendar.getInstance();
             return new OutputVeiculo(veiculo);
-        }catch(Exception e){
-            throw new VeiculoInvalidoException("Não foi possível salvar a Moto no Banco de Dados");
         }
+            throw new VeiculoInvalidoException("Não foi possível salvar a Moto no Banco de Dados");
 
     }
 
     public OutputVeiculo saveCaminhao(InputVeiculo input, Usuario usuario) throws VeiculoInvalidoException{
-        try{
+        if(this.validaVeiculo(input)) {
             Veiculo veiculo = input.convert();
 
             this.caminhaoService.montaCaminhao(veiculo, input, usuario);
@@ -100,14 +98,21 @@ public class VeiculoService {
 
             Calendar cal = Calendar.getInstance();
             return new OutputVeiculo(veiculo);
-        }catch(Exception e ){
-            throw new VeiculoInvalidoException("Não foi possível salvar o Caminhão no Banco de Dados");
         }
-
+            throw new VeiculoInvalidoException("Não foi possível salvar o Caminhão no Banco de Dados");
     }
+
 
     public String weekDay(Calendar cal) {
         return new DateFormatSymbols().getWeekdays()[cal.get(Calendar.DAY_OF_WEEK)];
+    }
+
+    private boolean validaVeiculo(InputVeiculo input){
+        return !input.getMarca().isEmpty() &&
+                !input.getModelo().isEmpty() &&
+                !input.getAno().isEmpty() &&
+                !input.getTipo().isEmpty() &&
+                !input.getCombustivel().isEmpty();
     }
 
 

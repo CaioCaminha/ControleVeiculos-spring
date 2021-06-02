@@ -1,6 +1,7 @@
 package caio.caminha.ControleVeiculo.controllers;
 
 import caio.caminha.ControleVeiculo.enums.TipoVeiculo;
+import caio.caminha.ControleVeiculo.exceptions.VeiculoInvalidoException;
 import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.outputs.OutputVeiculo;
@@ -43,7 +44,7 @@ public class VeiculoController {
 
 
     @PostMapping
-    public ResponseEntity<?> createVeiculo(@RequestBody @Valid InputVeiculo input,
+    public ResponseEntity<?> createVeiculo(@RequestBody InputVeiculo input,
                                                        UriComponentsBuilder builder,
                                                        @RequestHeader("Authorization") String token){
         try{
@@ -61,7 +62,7 @@ public class VeiculoController {
 
                 return ResponseEntity.created(uri).body(output);
         }catch(Exception e){
-            return ResponseEntity.badRequest().body("Erro ao cadastrar veículo!");
+            return ResponseEntity.badRequest().body(new VeiculoInvalidoException("Erro ao Cadastrar veículo, verifique os campos!").getMessage());
         }
     }
 
