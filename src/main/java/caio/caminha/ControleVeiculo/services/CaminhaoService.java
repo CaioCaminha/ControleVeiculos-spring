@@ -1,5 +1,6 @@
 package caio.caminha.ControleVeiculo.services;
 
+import caio.caminha.ControleVeiculo.enums.TipoVeiculo;
 import caio.caminha.ControleVeiculo.feignRequests.FipeClient;
 import caio.caminha.ControleVeiculo.feignRequests.Modelo;
 import caio.caminha.ControleVeiculo.feignRequests.ObjectFipe;
@@ -35,11 +36,11 @@ public class CaminhaoService extends VeiculoClient{
     }
 
     private int getCodigoMarcaCaminhao(String nomeMarca){
-        return super.getCodigoMarca(nomeMarca, "caminhoes");
+        return super.getCodigoMarca(nomeMarca, TipoVeiculo.CAMINHAO.getTipo());
     }
 
     private int getCodigoModeloCaminhao(String nomeModelo, int codigoMarca){
-        return super.getCodigoModelo(nomeModelo, codigoMarca, "caminhoes");
+        return super.getCodigoModelo(nomeModelo, codigoMarca, TipoVeiculo.CAMINHAO.getTipo());
     }
 
     private VeiculoFipe getVeiculoFipeCaminhao(int codigoMarca, int codigoModelo, int ano){

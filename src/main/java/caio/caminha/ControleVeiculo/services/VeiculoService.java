@@ -1,5 +1,6 @@
 package caio.caminha.ControleVeiculo.services;
 
+import caio.caminha.ControleVeiculo.enums.TipoVeiculo;
 import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.models.Veiculo;
@@ -46,7 +47,7 @@ public class VeiculoService {
     }
 
     public OutputVeiculo saveVeiculo(InputVeiculo input, Usuario usuario){
-        if ("moto".equals(input.getTipo())) {
+        if (TipoVeiculo.MOTO.getTipo().equals(input.getTipo())) {
             return saveMoto(input, usuario);
         }
         return saveCaminhao(input, usuario);

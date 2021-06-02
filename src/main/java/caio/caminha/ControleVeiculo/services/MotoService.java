@@ -1,16 +1,13 @@
 package caio.caminha.ControleVeiculo.services;
 
+import caio.caminha.ControleVeiculo.enums.TipoVeiculo;
 import caio.caminha.ControleVeiculo.feignRequests.FipeClient;
-import caio.caminha.ControleVeiculo.feignRequests.Modelo;
-import caio.caminha.ControleVeiculo.feignRequests.ObjectFipe;
 import caio.caminha.ControleVeiculo.feignRequests.VeiculoFipe;
 import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.models.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MotoService extends VeiculoClient{
@@ -34,11 +31,11 @@ public class MotoService extends VeiculoClient{
     }
 
     private int getCodigoMarcaMoto(String nomeMarca){
-        return super.getCodigoMarca(nomeMarca, "motos");
+        return super.getCodigoMarca(nomeMarca, TipoVeiculo.MOTOS.getTipo());
     }
 
     private int getCodigoModeloMoto(String nomeModelo, int codigoMarca){
-        return super.getCodigoModelo(nomeModelo, codigoMarca, "motos");
+        return super.getCodigoModelo(nomeModelo, codigoMarca, TipoVeiculo.MOTOS.getTipo());
     }
 
     private VeiculoFipe getVeiculoFipeMoto(int codigoMarca, int codigoModelo, int ano){

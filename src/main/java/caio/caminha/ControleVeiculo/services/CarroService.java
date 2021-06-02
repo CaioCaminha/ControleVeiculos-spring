@@ -1,5 +1,7 @@
 package caio.caminha.ControleVeiculo.services;
 
+import caio.caminha.ControleVeiculo.enums.DiaSemana;
+import caio.caminha.ControleVeiculo.enums.TipoVeiculo;
 import caio.caminha.ControleVeiculo.feignRequests.FipeClient;
 import caio.caminha.ControleVeiculo.feignRequests.Modelo;
 import caio.caminha.ControleVeiculo.feignRequests.ObjectFipe;
@@ -34,30 +36,30 @@ public class CarroService extends VeiculoClient{
     }
 
     private int getCodigoMarcaCarro(String nomeMarca){
-        return super.getCodigoMarca(nomeMarca, "carros");
+        return super.getCodigoMarca(nomeMarca, TipoVeiculo.CARRO.getTipo());
     }
 
     private int getCodigoModeloCarro(String nomeModelo, int codigoMarca){
-        return super.getCodigoModelo(nomeModelo, codigoMarca, "caminhoes");
+        return super.getCodigoModelo(nomeModelo, codigoMarca, TipoVeiculo.CARRO.getTipo());
     }
 
     private String diaDoRodizio(String ano){
         if(ano.substring(3).equals("0") || ano.substring(3).equals("1")){
-            return "segunda-feira";
+            return DiaSemana.SEGUNDA.getDiaDaSemana();
         }
         if(ano.substring(3).equals("2") || ano.substring(3).equals("3")){
-            return "terça-feira";
+            return DiaSemana.TERCA.getDiaDaSemana();
         }
         if(ano.substring(3).equals("4") || ano.substring(3).equals("5")){
-            return "quarta-feira";
+            return DiaSemana.QUARTA.getDiaDaSemana();
         }
         if(ano.substring(3).equals("6") || ano.substring(3).equals("7")){
-            return "quinta-feira";
+            return DiaSemana.QUINTA.getDiaDaSemana();
         }
         if (ano.substring(3).equals("8") || ano.substring(3).equals("9")){
-            return "sexta-feira";
+            return DiaSemana.SEXTA.getDiaDaSemana();
         }else{
-            return "sabado-feira";
+            return "segunda-feira";
         }
     }
 
