@@ -1,6 +1,7 @@
 package caio.caminha.ControleVeiculo.services;
 
 import caio.caminha.ControleVeiculo.enums.TipoVeiculo;
+import caio.caminha.ControleVeiculo.exceptions.VeiculoInvalidoException;
 import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.models.Veiculo;
@@ -41,12 +42,15 @@ public class VeiculoService {
 
     public Page<OutputVeiculo> getVeiculos(String token, Pageable pageable){
         Long id = this.tokenService.getUserId(token.substring(7, token.length()));
+
         String userName = this.usuarioRepository.getById(id).getEmail();
+
         Page<Veiculo> veiculos = this.veiculoRepository.findByUsuarioEmail(userName, pageable);
+
         return OutputVeiculo.convert(veiculos);
     }
 
-    public OutputVeiculo saveVeiculo(InputVeiculo input, Usuario usuario){
+    public OutputVeiculo saveVeiculo(InputVeiculo input, Usuario usuario) throws VeiculoInvalidoException {
         if (TipoVeiculo.MOTO.getTipo().equals(input.getTipo())) {
             return saveMoto(input, usuario);
         }
@@ -54,38 +58,51 @@ public class VeiculoService {
     }
 
 
-    public OutputVeiculoCarro saveCarro(InputVeiculo input, Usuario usuario){
-        Veiculo veiculo = input.convert();
+    public OutputVeiculoCarro saveCarro(InputVeiculo input, Usuario usuario) throws VeiculoInvalidoException{
+        try{
+            Veiculo veiculo = input.convert();
 
-        //Realiza as requisições do feign e retorna o obj veiculo montado
-        this.carroService.montaCarro(veiculo, input, usuario);
-        this.veiculoRepository.save(veiculo);
-        Calendar cal = Calendar.getInstance();
-        OutputVeiculoCarro output = new OutputVeiculoCarro(veiculo);
-        output.setRodizioAtivo(output.getDiaRodizio().equals(this.weekDay(cal)));
-        return output;
+            this.carroService.montaCarro(veiculo, input, usuario);
+            this.veiculoRepository.save(veiculo);
 
-    }
+            Calendar cal = Calendar.getInstance();
+            OutputVeiculoCarro output = new OutputVeiculoCarro(veiculo);
 
-    public OutputVeiculo saveMoto(InputVeiculo input, Usuario usuario){
-        Veiculo veiculo = input.convert();
-
-        this.motoService.montaMoto(veiculo, input, usuario);
-
-        this.veiculoRepository.save(veiculo);
-        Calendar cal = Calendar.getInstance();
-        return new OutputVeiculo(veiculo);
+            output.setRodizioAtivo(output.getDiaRodizio().equals(this.weekDay(cal)));
+            return output;
+        }catch(Exception e){
+            throw new VeiculoInvalidoException("Não foi possível salvar o Carro no Banco de Dados");
+        }
 
     }
 
-    public OutputVeiculo saveCaminhao(InputVeiculo input, Usuario usuario){
-        Veiculo veiculo = input.convert();
+    public OutputVeiculo saveMoto(InputVeiculo input, Usuario usuario) throws VeiculoInvalidoException{
+        try{
+            Veiculo veiculo = input.convert();
 
-        this.caminhaoService.montaCaminhao(veiculo, input, usuario);
+            this.motoService.montaMoto(veiculo, input, usuario);
 
-        this.veiculoRepository.save(veiculo);
-        Calendar cal = Calendar.getInstance();
-        return new OutputVeiculo(veiculo);
+            this.veiculoRepository.save(veiculo);
+            Calendar cal = Calendar.getInstance();
+            return new OutputVeiculo(veiculo);
+        }catch(Exception e){
+            throw new VeiculoInvalidoException("Não foi possível salvar a Moto no Banco de Dados");
+        }
+
+    }
+
+    public OutputVeiculo saveCaminhao(InputVeiculo input, Usuario usuario) throws VeiculoInvalidoException{
+        try{
+            Veiculo veiculo = input.convert();
+
+            this.caminhaoService.montaCaminhao(veiculo, input, usuario);
+            this.veiculoRepository.save(veiculo);
+
+            Calendar cal = Calendar.getInstance();
+            return new OutputVeiculo(veiculo);
+        }catch(Exception e ){
+            throw new VeiculoInvalidoException("Não foi possível salvar o Caminhão no Banco de Dados");
+        }
 
     }
 

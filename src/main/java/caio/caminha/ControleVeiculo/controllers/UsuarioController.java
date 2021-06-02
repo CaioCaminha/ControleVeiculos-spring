@@ -30,14 +30,13 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<OutputUsuario> createUsuario(@RequestBody @Valid InputUsuario input, UriComponentsBuilder builder){
+    public ResponseEntity<?> createUsuario(@RequestBody @Valid InputUsuario input, UriComponentsBuilder builder){
         try{
             OutputUsuario output = this.service.save(input);
             URI uri = builder.path("/usuarios/{id}").buildAndExpand(output.getId()).toUri();
-            output.setCpf(input.getCpf());
             return ResponseEntity.created(uri).body(output);
         }catch(Exception e){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Verifique as informações e tente novamente");
         }
     }
 

@@ -1,6 +1,8 @@
 package caio.caminha.ControleVeiculo.controllers;
 
+import caio.caminha.ControleVeiculo.exceptions.UsuarioInvalidoException;
 import caio.caminha.ControleVeiculo.inputs.AuthInput;
+import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.outputs.OutputToken;
 import caio.caminha.ControleVeiculo.securityServices.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +28,14 @@ public class AutenticacaoController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<OutputToken> authenticate(@RequestBody @Valid AuthInput input){
+    public ResponseEntity<?> authenticate(@RequestBody @Valid AuthInput input){
         UsernamePasswordAuthenticationToken dadosLogin = input.convert();
-
-
-               Authentication authentication = authenticationManager.authenticate(dadosLogin);
-               String token = this.tokenService.generateToken(authentication);
-               return ResponseEntity.ok(new OutputToken(token, "Bearer "));
-
-
+               try{
+                   Authentication authentication = authenticationManager.authenticate(dadosLogin);
+                   String token = this.tokenService.generateToken(authentication);
+                   return ResponseEntity.ok(new OutputToken(token, "Bearer "));
+               }catch(Exception e){
+                   return ResponseEntity.badRequest().body("Usuário Inválido, tente novamente!");
+               }
     }
 }

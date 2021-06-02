@@ -3,17 +3,12 @@ package caio.caminha.ControleVeiculo.services;
 import caio.caminha.ControleVeiculo.enums.DiaSemana;
 import caio.caminha.ControleVeiculo.enums.TipoVeiculo;
 import caio.caminha.ControleVeiculo.feignRequests.FipeClient;
-import caio.caminha.ControleVeiculo.feignRequests.Modelo;
-import caio.caminha.ControleVeiculo.feignRequests.ObjectFipe;
 import caio.caminha.ControleVeiculo.feignRequests.VeiculoFipe;
 import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.models.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class CarroService extends VeiculoClient{
@@ -36,11 +31,11 @@ public class CarroService extends VeiculoClient{
     }
 
     private int getCodigoMarcaCarro(String nomeMarca){
-        return super.getCodigoMarca(nomeMarca, TipoVeiculo.CARRO.getTipo());
+        return super.getCodigoMarca(nomeMarca, TipoVeiculo.CARROS.getTipo());
     }
 
     private int getCodigoModeloCarro(String nomeModelo, int codigoMarca){
-        return super.getCodigoModelo(nomeModelo, codigoMarca, TipoVeiculo.CARRO.getTipo());
+        return super.getCodigoModelo(nomeModelo, codigoMarca, TipoVeiculo.CARROS.getTipo());
     }
 
     private String diaDoRodizio(String ano){

@@ -1,7 +1,8 @@
 package caio.caminha.ControleVeiculo.enums;
 
 public enum TipoVeiculo {
-    CARRO("carros"),
+    CARROS("carros"),
+    CARRO("carro"),
     MOTOS("motos"),
     MOTO("moto"),
     CAMINHAO("caminhoes");

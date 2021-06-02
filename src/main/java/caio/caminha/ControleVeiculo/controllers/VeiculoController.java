@@ -1,5 +1,6 @@
 package caio.caminha.ControleVeiculo.controllers;
 
+import caio.caminha.ControleVeiculo.enums.TipoVeiculo;
 import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.outputs.OutputVeiculo;
@@ -13,10 +14,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -40,14 +43,14 @@ public class VeiculoController {
 
 
     @PostMapping
-    public ResponseEntity<?> createVeiculo(@RequestBody InputVeiculo input,
+    public ResponseEntity<?> createVeiculo(@RequestBody @Valid InputVeiculo input,
                                                        UriComponentsBuilder builder,
                                                        @RequestHeader("Authorization") String token){
         try{
             Long id = this.tokenService.getUserId(token.substring(POSICAO_BEARER, token.length()));
             Usuario usuario = this.usuarioRepository.getById(id);
 
-            if(input.getTipo().equals("carro")){
+            if(input.getTipo().equals(TipoVeiculo.CARRO.getTipo())){
                 OutputVeiculoCarro output = this.veiculoService.saveCarro(input, usuario);
                 URI uri = builder.path("/veiculos/{id}").buildAndExpand(output.getId()).toUri();
 
@@ -58,12 +61,12 @@ public class VeiculoController {
 
                 return ResponseEntity.created(uri).body(output);
         }catch(Exception e){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Erro ao cadastrar veículo!");
         }
     }
 
     @GetMapping
-    public ResponseEntity<Page<OutputVeiculo>> listVeiculo(@RequestHeader("Authorization") String token,
+    public ResponseEntity<?> listVeiculo(@RequestHeader("Authorization") String token,
                                                            @PageableDefault(sort = "id",
                                                                    direction = Sort.Direction.ASC,
                                                                    page = 0, size = 10)Pageable pageable){
@@ -71,7 +74,7 @@ public class VeiculoController {
             Page<OutputVeiculo> outputVeiculos = this.veiculoService.getVeiculos(token, pageable);
             return ResponseEntity.ok(outputVeiculos);
         }else{
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Autentique-se e tente novamente!");
         }
 
     }

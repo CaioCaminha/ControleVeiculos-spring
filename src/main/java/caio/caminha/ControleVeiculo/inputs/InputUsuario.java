@@ -33,20 +33,9 @@ public class InputUsuario {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public String getNascimento() {
@@ -55,10 +44,6 @@ public class InputUsuario {
 
     public String getPassword() {
         return password;
-    }
-
-    public void setNascimento(String nascimento) {
-        this.nascimento = nascimento;
     }
 
     public Usuario convert() throws ParseException {
