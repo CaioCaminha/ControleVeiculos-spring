@@ -2,7 +2,7 @@ package caio.caminha.ControleVeiculo.security;
 
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.repositories.UsuarioRepository;
-import caio.caminha.ControleVeiculo.services.TokenService;
+import caio.caminha.ControleVeiculo.securityServices.TokenService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

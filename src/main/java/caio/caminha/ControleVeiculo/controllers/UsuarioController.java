@@ -1,18 +1,19 @@
 package caio.caminha.ControleVeiculo.controllers;
 
 import caio.caminha.ControleVeiculo.inputs.InputUsuario;
+import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.outputs.OutputUsuario;
+import caio.caminha.ControleVeiculo.repositories.UsuarioRepository;
 import caio.caminha.ControleVeiculo.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -20,6 +21,13 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService service;
+    @Autowired
+    private UsuarioRepository repository;
+
+    @GetMapping
+    public List<Usuario> getUsuarios(){
+        return this.repository.findAll();
+    }
 
     @PostMapping
     public ResponseEntity<OutputUsuario> createUsuario(@RequestBody @Valid InputUsuario input, UriComponentsBuilder builder){

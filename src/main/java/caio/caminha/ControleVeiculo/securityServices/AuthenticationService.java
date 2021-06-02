@@ -1,4 +1,4 @@
-package caio.caminha.ControleVeiculo.services;
+package caio.caminha.ControleVeiculo.securityServices;
 
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.repositories.UsuarioRepository;
@@ -19,7 +19,7 @@ public class AuthenticationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Usuario> usuario = repository.findByEmail(username);
+        Optional<Usuario> usuario = repository.findByCpf(username);
 
         if(usuario.isPresent()){
             return usuario.get();

@@ -4,12 +4,13 @@ import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.models.Veiculo;
 import caio.caminha.ControleVeiculo.outputs.OutputVeiculo;
+import caio.caminha.ControleVeiculo.outputs.OutputVeiculoCarro;
 import caio.caminha.ControleVeiculo.repositories.UsuarioRepository;
 import caio.caminha.ControleVeiculo.repositories.VeiculoRepository;
+import caio.caminha.ControleVeiculo.securityServices.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormatSymbols;
@@ -45,25 +46,21 @@ public class VeiculoService {
     }
 
     public OutputVeiculo saveVeiculo(InputVeiculo input, Usuario usuario){
-            switch (input.getTipo()){
-                case "moto":
-                    return saveMoto(input, usuario);
-                case "caminhao":
-                    return saveCaminhao(input, usuario);
-                default:
-                    return saveCarro(input, usuario);
-            }
+        if ("moto".equals(input.getTipo())) {
+            return saveMoto(input, usuario);
+        }
+        return saveCaminhao(input, usuario);
     }
 
 
-    public OutputVeiculo saveCarro(InputVeiculo input, Usuario usuario){
+    public OutputVeiculoCarro saveCarro(InputVeiculo input, Usuario usuario){
         Veiculo veiculo = input.convert();
 
         //Realiza as requisições do feign e retorna o obj veiculo montado
         this.carroService.montaCarro(veiculo, input, usuario);
         this.veiculoRepository.save(veiculo);
         Calendar cal = Calendar.getInstance();
-        OutputVeiculo output = new OutputVeiculo(veiculo);
+        OutputVeiculoCarro output = new OutputVeiculoCarro(veiculo);
         output.setRodizioAtivo(output.getDiaRodizio().equals(this.weekDay(cal)));
         return output;
 
@@ -76,9 +73,7 @@ public class VeiculoService {
 
         this.veiculoRepository.save(veiculo);
         Calendar cal = Calendar.getInstance();
-        OutputVeiculo output = new OutputVeiculo(veiculo);
-        output.setRodizioAtivo(output.getDiaRodizio().equals(this.weekDay(cal)));
-        return output;
+        return new OutputVeiculo(veiculo);
 
     }
 
@@ -89,9 +84,7 @@ public class VeiculoService {
 
         this.veiculoRepository.save(veiculo);
         Calendar cal = Calendar.getInstance();
-        OutputVeiculo output = new OutputVeiculo(veiculo);
-        output.setRodizioAtivo(output.getDiaRodizio().equals(this.weekDay(cal)));
-        return output;
+        return new OutputVeiculo(veiculo);
 
     }
 

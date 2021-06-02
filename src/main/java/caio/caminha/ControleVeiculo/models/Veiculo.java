@@ -1,5 +1,6 @@
 package caio.caminha.ControleVeiculo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -16,8 +17,7 @@ public class Veiculo {
     private String valor;
     private String diaRodizio;
     private String combustivel;
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Usuario usuario;
 
     public Veiculo(){}

@@ -20,19 +20,22 @@ public class Usuario implements UserDetails {
     private String nome;
     private String email;
     private String cpf;
+    private String password;
     private Date nascimento;
-    @OneToMany(mappedBy = "usuario")
-    private List<Veiculo> veiculos;
+
 
     public Usuario(){}
 
-    public Usuario(String nome, String email, String cpf, String nascimento) throws ParseException {
+    public Usuario(String nome, String email, String cpf, String password, String nascimento) throws ParseException {
         this.nome = nome;
         this.email = email;
         this.cpf = cpf;
+        this.password = password;
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         this.nascimento = formato.parse(nascimento);
     }
+
+
 
     public Long getId() {
         return id;
@@ -65,17 +68,17 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getPassword() {
-        return cpf;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return cpf;
     }
 
     @Override
     public String toString() {
-        return this.email;
+        return this.cpf;
     }
 
     @Override

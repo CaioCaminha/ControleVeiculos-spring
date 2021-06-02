@@ -1,13 +1,12 @@
 package caio.caminha.ControleVeiculo.services;
 
-import caio.caminha.ControleVeiculo.feignRequests.FipeRequest;
+import caio.caminha.ControleVeiculo.feignRequests.FipeClient;
 import caio.caminha.ControleVeiculo.feignRequests.Modelo;
 import caio.caminha.ControleVeiculo.feignRequests.ObjectFipe;
 import caio.caminha.ControleVeiculo.feignRequests.VeiculoFipe;
 import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.models.Veiculo;
-import caio.caminha.ControleVeiculo.outputs.OutputVeiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CarroService {
+public class CarroService extends VeiculoClient{
 
     @Autowired
-    private FipeRequest fipeRequest;
+    private FipeClient fipeClient;
+
+    public CarroService(FipeClient fipeClient) {
+        super(fipeClient);
+    }
 
     public void montaCarro(Veiculo veiculo, InputVeiculo input, Usuario usuario){
         int codigoMarcaCarro = this.getCodigoMarcaCarro(input.getMarca());
@@ -31,26 +34,11 @@ public class CarroService {
     }
 
     private int getCodigoMarcaCarro(String nomeMarca){
-        ArrayList<ObjectFipe> marcas =  this.fipeRequest.getMarcasCarros();
-        for (ObjectFipe marca:marcas){
-            if(marca.getNome().equals(nomeMarca)){
-                return Integer.parseInt(marca.getCodigo());
-            }
-        }
-        return 0;
+        return super.getCodigoMarca(nomeMarca, "carros");
     }
 
     private int getCodigoModeloCarro(String nomeModelo, int codigoMarca){
-        Modelo modelos =  this.fipeRequest.getModelosCarros(codigoMarca);
-
-        List<ObjectFipe> modelo = modelos.getModelos();
-
-        for(ObjectFipe modeloObject : modelo){
-            if(modeloObject.getNome().equals(nomeModelo)){
-                return Integer.parseInt(modeloObject.getCodigo());
-            }
-        }
-        return 0;
+        return super.getCodigoModelo(nomeModelo, codigoMarca, "caminhoes");
     }
 
     private String diaDoRodizio(String ano){
@@ -90,11 +78,11 @@ public class CarroService {
 
 
     private VeiculoFipe getVeiculoFipeCarroGasolina(int codigoMarca, int codigoModelo, int ano){
-        return this.fipeRequest.getVeiculoFipeCarroGasolina(codigoMarca, codigoModelo, ano);
+        return this.fipeClient.getVeiculoFipeCarroGasolina(codigoMarca, codigoModelo, ano);
     }
 
     private VeiculoFipe getVeiculoFipeCarroDiesel(int codigoMarca, int codigoModelo, int ano){
-        return this.fipeRequest.getVeiculoFipeCarroDiesel(codigoMarca, codigoModelo, ano);
+        return this.fipeClient.getVeiculoFipeCarroDiesel(codigoMarca, codigoModelo, ano);
     }
 
 }

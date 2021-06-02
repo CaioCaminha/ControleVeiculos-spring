@@ -19,6 +19,9 @@ public class InputUsuario {
     @JsonProperty("cpf")
     private String cpf;
     @NotNull @NotEmpty
+    @JsonProperty("password")
+    private String password;
+    @NotNull @NotEmpty
     @JsonProperty("nascimento")
     private String nascimento;
 
@@ -26,7 +29,39 @@ public class InputUsuario {
         return cpf;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getNascimento() {
+        return nascimento;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setNascimento(String nascimento) {
+        this.nascimento = nascimento;
+    }
+
     public Usuario convert() throws ParseException {
-        return new Usuario(this.nome, this.email, new BCryptPasswordEncoder().encode(this.cpf), this.nascimento);
+        return new Usuario(this.nome, this.email, this.cpf, new BCryptPasswordEncoder().encode(this.password), this.nascimento);
     }
 }

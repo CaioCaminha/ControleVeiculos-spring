@@ -2,13 +2,12 @@ package caio.caminha.ControleVeiculo.controllers;
 
 import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 import caio.caminha.ControleVeiculo.models.Usuario;
-import caio.caminha.ControleVeiculo.models.Veiculo;
 import caio.caminha.ControleVeiculo.outputs.OutputVeiculo;
+import caio.caminha.ControleVeiculo.outputs.OutputVeiculoCarro;
 import caio.caminha.ControleVeiculo.repositories.UsuarioRepository;
 import caio.caminha.ControleVeiculo.repositories.VeiculoRepository;
-import caio.caminha.ControleVeiculo.services.TokenService;
+import caio.caminha.ControleVeiculo.securityServices.TokenService;
 import caio.caminha.ControleVeiculo.services.VeiculoService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,11 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Calendar;
 
 @RestController
 @RequestMapping("/veiculos")
 public class VeiculoController {
+
+    public static final int POSICAO_BEARER = 7;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -37,17 +37,26 @@ public class VeiculoController {
     @Autowired
     private TokenService tokenService;
 
+
+
     @PostMapping
-    public ResponseEntity<OutputVeiculo> createVeiculo(@RequestBody InputVeiculo input,
+    public ResponseEntity<?> createVeiculo(@RequestBody InputVeiculo input,
                                                        UriComponentsBuilder builder,
                                                        @RequestHeader("Authorization") String token){
         try{
-            Long id = this.tokenService.getUserId(token.substring(7, token.length()));
+            Long id = this.tokenService.getUserId(token.substring(POSICAO_BEARER, token.length()));
             Usuario usuario = this.usuarioRepository.getById(id);
-            OutputVeiculo output = this.veiculoService.saveVeiculo(input, usuario);
 
-            URI uri = builder.path("/veiculos/{id}").buildAndExpand(output.getId()).toUri();
-            return ResponseEntity.created(uri).body(output);
+            if(input.getTipo().equals("carro")){
+                OutputVeiculoCarro output = this.veiculoService.saveCarro(input, usuario);
+                URI uri = builder.path("/veiculos/{id}").buildAndExpand(output.getId()).toUri();
+
+                return ResponseEntity.created(uri).body(output);
+            }
+                OutputVeiculo output = this.veiculoService.saveVeiculo(input, usuario);
+                URI uri = builder.path("/veiculos/{id}").buildAndExpand(output.getId()).toUri();
+
+                return ResponseEntity.created(uri).body(output);
         }catch(Exception e){
             return ResponseEntity.badRequest().build();
         }

@@ -1,4 +1,4 @@
-package caio.caminha.ControleVeiculo.services;
+package caio.caminha.ControleVeiculo.securityServices;
 
 import caio.caminha.ControleVeiculo.models.Usuario;
 import io.jsonwebtoken.Claims;

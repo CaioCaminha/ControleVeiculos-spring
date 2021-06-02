@@ -1,6 +1,6 @@
 package caio.caminha.ControleVeiculo.services;
 
-import caio.caminha.ControleVeiculo.feignRequests.FipeRequest;
+import caio.caminha.ControleVeiculo.feignRequests.FipeClient;
 import caio.caminha.ControleVeiculo.feignRequests.Modelo;
 import caio.caminha.ControleVeiculo.feignRequests.ObjectFipe;
 import caio.caminha.ControleVeiculo.feignRequests.VeiculoFipe;
@@ -14,10 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CaminhaoService {
+public class CaminhaoService extends VeiculoClient{
 
     @Autowired
-    private FipeRequest fipeRequest;
+    private FipeClient fipeClient;
+
+    public CaminhaoService(FipeClient fipeClient) {
+        super(fipeClient);
+    }
 
     public void montaCaminhao(Veiculo veiculo, InputVeiculo input, Usuario usuario){
         int codigoMarcaMoto = this.getCodigoMarcaCaminhao(input.getMarca());
@@ -28,54 +32,18 @@ public class CaminhaoService {
 
         veiculo.setUsuario(usuario);
         veiculo.setValor(veiculoFipe.getValor());
-        veiculo.setDiaRodizio(this.diaDoRodizio(input.getAno()));
     }
 
     private int getCodigoMarcaCaminhao(String nomeMarca){
-        ArrayList<ObjectFipe> marcas =  this.fipeRequest.getMarcasCaminhoes();
-        for (ObjectFipe marca:marcas){
-            if(marca.getNome().equals(nomeMarca)){
-                return Integer.parseInt(marca.getCodigo());
-            }
-        }
-        return 0;
+        return super.getCodigoMarca(nomeMarca, "caminhoes");
     }
 
     private int getCodigoModeloCaminhao(String nomeModelo, int codigoMarca){
-        Modelo modelos =  this.fipeRequest.getModelosCaminhoes(codigoMarca);
-
-        List<ObjectFipe> modelo = modelos.getModelos();
-
-        for(ObjectFipe modeloObject : modelo){
-            if(modeloObject.getNome().equals(nomeModelo)){
-                return Integer.parseInt(modeloObject.getCodigo());
-            }
-        }
-        return 0;
-    }
-
-    private String diaDoRodizio(String ano){
-        if(ano.substring(3).equals("0") || ano.substring(3).equals("1")){
-            return "segunda-feira";
-        }
-        if(ano.substring(3).equals("2") || ano.substring(3).equals("3")){
-            return "terça-feira";
-        }
-        if(ano.substring(3).equals("4") || ano.substring(3).equals("5")){
-            return "quarta-feira";
-        }
-        if(ano.substring(3).equals("6") || ano.substring(3).equals("7")){
-            return "quinta-feira";
-        }
-        if (ano.substring(3).equals("8") || ano.substring(3).equals("9")){
-            return "sexta-feira";
-        }else{
-            return "sabado";
-        }
+        return super.getCodigoModelo(nomeModelo, codigoMarca, "caminhoes");
     }
 
     private VeiculoFipe getVeiculoFipeCaminhao(int codigoMarca, int codigoModelo, int ano){
-        return this.fipeRequest.getVeiculoFipeCaminhoes(codigoMarca, codigoModelo, ano);
+        return this.fipeClient.getVeiculoFipeCaminhoes(codigoMarca, codigoModelo, ano);
     }
 
 }

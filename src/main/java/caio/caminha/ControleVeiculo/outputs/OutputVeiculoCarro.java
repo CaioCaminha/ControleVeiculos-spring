@@ -1,32 +1,34 @@
 package caio.caminha.ControleVeiculo.outputs;
 
-import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.models.Veiculo;
 import org.springframework.data.domain.Page;
 
-public class OutputVeiculo {
+public class OutputVeiculoCarro {
     private Long id;
     private String tipo;
     private String marca;
     private String modelo;
     private Integer ano;
     private String valor;
+    private String diaRodizio;
     private String combustivel;
     private String usuario;
+    private boolean rodizioAtivo;
 
-    public OutputVeiculo(){}
 
-    public OutputVeiculo(Veiculo veiculo){
+    public OutputVeiculoCarro(){}
+
+    public OutputVeiculoCarro(Veiculo veiculo){
         this.id = veiculo.getId();
         this.tipo = veiculo.getTipo();
         this.marca = veiculo.getMarca();
         this.modelo = veiculo.getModelo();
         this.ano = veiculo.getAno();
         this.valor = veiculo.getValor();
+        this.diaRodizio = veiculo.getDiaRodizio();
         this.combustivel = veiculo.getCombustivel();
         this.usuario = veiculo.getUsuario().getEmail();
     }
-
 
     public Long getId() {
         return id;
@@ -76,6 +78,13 @@ public class OutputVeiculo {
         this.valor = valor;
     }
 
+    public String getDiaRodizio() {
+        return diaRodizio;
+    }
+
+    public void setDiaRodizio(String diaRodizio) {
+        this.diaRodizio = diaRodizio;
+    }
 
     public String getCombustivel() {
         return combustivel;
@@ -89,11 +98,21 @@ public class OutputVeiculo {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario.getEmail();
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
-    public static Page<OutputVeiculo> convert(Page<Veiculo> veiculos){
-        return veiculos.map(OutputVeiculo::new);
+    public boolean isRodizioAtivo() {
+        return rodizioAtivo;
     }
+
+    public void setRodizioAtivo(boolean rodizioAtivo) {
+        this.rodizioAtivo = rodizioAtivo;
+    }
+
+    public static Page<OutputVeiculoCarro> convert(Page<Veiculo> veiculos){
+        return veiculos.map(OutputVeiculoCarro::new);
+    }
+
 }
+

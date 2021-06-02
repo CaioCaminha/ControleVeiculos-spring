@@ -17,6 +17,7 @@ public class UsuarioService {
 
     public OutputUsuario save(InputUsuario input) throws ParseException {
         Usuario usuario = input.convert();
+        //todo: criar verificar de email
         this.repository.save(usuario);
         return new OutputUsuario(usuario);
     }
