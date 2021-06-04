@@ -6,7 +6,6 @@ import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.models.Veiculo;
 import caio.caminha.ControleVeiculo.outputs.OutputVeiculo;
-import caio.caminha.ControleVeiculo.outputs.OutputVeiculoCarro;
 import caio.caminha.ControleVeiculo.repositories.UsuarioRepository;
 import caio.caminha.ControleVeiculo.repositories.VeiculoRepository;
 import caio.caminha.ControleVeiculo.securityServices.TokenService;
@@ -20,7 +19,6 @@ import java.util.Calendar;
 
 @Service
 public class VeiculoService {
-
 
     @Autowired
     private VeiculoRepository veiculoRepository;
@@ -53,12 +51,14 @@ public class VeiculoService {
     public OutputVeiculo saveVeiculo(InputVeiculo input, Usuario usuario) throws VeiculoInvalidoException {
         if (TipoVeiculo.MOTO.getTipo().equals(input.getTipo())) {
             return saveMoto(input, usuario);
+        }else if(TipoVeiculo.CARRO.getTipo().equals(input.getTipo())){
+            return saveCarro(input, usuario);
         }
         return saveCaminhao(input, usuario);
     }
 
 
-    public OutputVeiculoCarro saveCarro(InputVeiculo input, Usuario usuario) throws VeiculoInvalidoException{
+    public OutputVeiculo saveCarro(InputVeiculo input, Usuario usuario) throws VeiculoInvalidoException{
         if(this.validaVeiculo(input)) {
             Veiculo veiculo = input.convert();
 
@@ -66,7 +66,7 @@ public class VeiculoService {
             this.veiculoRepository.save(veiculo);
 
             Calendar cal = Calendar.getInstance();
-            OutputVeiculoCarro output = new OutputVeiculoCarro(veiculo);
+            OutputVeiculo output = new OutputVeiculo(veiculo);
 
             output.setRodizioAtivo(output.getDiaRodizio().equals(this.weekDay(cal)));
             return output;

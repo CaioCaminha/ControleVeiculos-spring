@@ -16,7 +16,7 @@ public class UsuarioService {
 
     public OutputUsuario save(InputUsuario input) throws Exception {
         Usuario usuario = input.convert();
-        if(!this.usuarioRepository.findByEmail(usuario.getEmail()).isPresent() ||
+        if(!this.usuarioRepository.findByEmail(usuario.getEmail()).isPresent() &&
                 !this.usuarioRepository.findByCpf(usuario.getCpf()).isPresent() ){
 
             this.usuarioRepository.save(usuario);

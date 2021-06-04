@@ -11,8 +11,10 @@ public class OutputVeiculo {
     private String modelo;
     private Integer ano;
     private String valor;
+    private String diaRodizio;
     private String combustivel;
     private String usuario;
+    private boolean rodizioAtivo;
 
     public OutputVeiculo(){}
 
@@ -25,6 +27,7 @@ public class OutputVeiculo {
         this.valor = veiculo.getValor();
         this.combustivel = veiculo.getCombustivel();
         this.usuario = veiculo.getUsuario().getEmail();
+        this.diaRodizio = veiculo.getDiaRodizio();
     }
 
 
@@ -56,6 +59,17 @@ public class OutputVeiculo {
         return combustivel;
     }
 
+    public String getDiaRodizio() {
+        return diaRodizio;
+    }
+
+    public boolean isRodizioAtivo() {
+        return rodizioAtivo;
+    }
+
+    public void setRodizioAtivo(boolean rodizioAtivo) {
+        this.rodizioAtivo = rodizioAtivo;
+    }
 
     public String getUsuario() {
         return usuario;

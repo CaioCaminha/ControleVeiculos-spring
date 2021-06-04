@@ -3,19 +3,16 @@ package caio.caminha.ControleVeiculo.services;
 import caio.caminha.ControleVeiculo.feignRequests.FipeClient;
 import caio.caminha.ControleVeiculo.feignRequests.Modelo;
 import caio.caminha.ControleVeiculo.feignRequests.ObjectFipe;
-import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class VeiculoClient {
-
     private FipeClient fipeClient;
 
     public VeiculoClient(FipeClient fipeClient){
         this.fipeClient = fipeClient;
     }
-
 
     public int getCodigoMarca(String nomeMarca, String tipo){
         ArrayList<ObjectFipe> marcas =  this.fipeClient.getMarcas(tipo);
@@ -26,7 +23,6 @@ public class VeiculoClient {
         }
         return 0;
     }
-
     public int getCodigoModelo(String nomeModelo, int codigoMarca, String tipo){
         Modelo modelos =  this.fipeClient.getModelos(codigoMarca, tipo);
 

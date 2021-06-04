@@ -1,11 +1,9 @@
 package caio.caminha.ControleVeiculo.controllers;
 
-import caio.caminha.ControleVeiculo.enums.TipoVeiculo;
 import caio.caminha.ControleVeiculo.exceptions.VeiculoInvalidoException;
 import caio.caminha.ControleVeiculo.inputs.InputVeiculo;
 import caio.caminha.ControleVeiculo.models.Usuario;
 import caio.caminha.ControleVeiculo.outputs.OutputVeiculo;
-import caio.caminha.ControleVeiculo.outputs.OutputVeiculoCarro;
 import caio.caminha.ControleVeiculo.repositories.UsuarioRepository;
 import caio.caminha.ControleVeiculo.repositories.VeiculoRepository;
 import caio.caminha.ControleVeiculo.securityServices.TokenService;
@@ -20,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -48,21 +45,16 @@ public class VeiculoController {
                                                        UriComponentsBuilder builder,
                                                        @RequestHeader("Authorization") String token){
         try{
-            Long id = this.tokenService.getUserId(token.substring(POSICAO_BEARER, token.length()));
-            Usuario usuario = this.usuarioRepository.getById(id);
+                Long id = this.tokenService.getUserId(token.substring(POSICAO_BEARER, token.length()));
+                Usuario usuario = this.usuarioRepository.getById(id);
 
-            if(input.getTipo().equals(TipoVeiculo.CARRO.getTipo())){
-                OutputVeiculoCarro output = this.veiculoService.saveCarro(input, usuario);
-                URI uri = builder.path("/veiculos/{id}").buildAndExpand(output.getId()).toUri();
-
-                return ResponseEntity.created(uri).body(output);
-            }
                 OutputVeiculo output = this.veiculoService.saveVeiculo(input, usuario);
                 URI uri = builder.path("/veiculos/{id}").buildAndExpand(output.getId()).toUri();
 
                 return ResponseEntity.created(uri).body(output);
         }catch(Exception e){
-            return ResponseEntity.badRequest().body(new VeiculoInvalidoException("Erro ao Cadastrar veículo, verifique os campos!").getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new VeiculoInvalidoException("Erro ao Cadastrar veículo, verifique os campos!").getMessage());
         }
     }
 

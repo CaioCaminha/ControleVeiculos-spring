@@ -25,6 +25,14 @@ public class InputUsuario {
     @JsonProperty("nascimento")
     private String nascimento;
 
+    public Usuario convert() throws ParseException {
+        return new Usuario(this.nome,
+                            this.email,
+                            this.cpf,
+                            new BCryptPasswordEncoder().encode(this.password),
+                            this.nascimento);
+    }
+
     public String getCpf() {
         return cpf;
     }
@@ -44,9 +52,5 @@ public class InputUsuario {
 
     public String getPassword() {
         return password;
-    }
-
-    public Usuario convert() throws ParseException {
-        return new Usuario(this.nome, this.email, this.cpf, new BCryptPasswordEncoder().encode(this.password), this.nascimento);
     }
 }

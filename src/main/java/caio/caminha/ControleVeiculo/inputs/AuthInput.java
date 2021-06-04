@@ -3,8 +3,6 @@ package caio.caminha.ControleVeiculo.inputs;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 public class AuthInput {
     @JsonProperty("cpf")

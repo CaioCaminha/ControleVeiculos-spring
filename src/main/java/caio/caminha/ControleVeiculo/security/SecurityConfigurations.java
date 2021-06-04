@@ -48,7 +48,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AuthenticationTokenFilter(this.usuarioRepository, this.tokenService), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new AuthenticationTokenFilter(this.usuarioRepository, this.tokenService),
+                                                                        UsernamePasswordAuthenticationFilter.class);
     }
 
     //configurações referentes a recursos estáticos(html, js, css, etc...)

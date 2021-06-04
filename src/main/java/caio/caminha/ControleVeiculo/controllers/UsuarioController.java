@@ -24,13 +24,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository repository;
 
-    @GetMapping
-    public List<Usuario> getUsuarios(){
-        return this.repository.findAll();
-    }
-
     @PostMapping
-    public ResponseEntity<?> createUsuario(@RequestBody @Valid InputUsuario input, UriComponentsBuilder builder){
+    public ResponseEntity<?> createUsuario(@RequestBody @Valid InputUsuario input,
+                                           UriComponentsBuilder builder){
         try{
             OutputUsuario output = this.service.save(input);
             URI uri = builder.path("/usuarios/{id}").buildAndExpand(output.getId()).toUri();
