@@ -25,6 +25,16 @@ public class InputUsuario {
     @JsonProperty("nascimento")
     private String nascimento;
 
+    public InputUsuario(){}
+
+    public InputUsuario(String nome,String email, String cpf, String password, String nascimento){
+        this.nome = nome;
+        this.email = email;
+        this.cpf = cpf;
+        this.password = password;
+        this.nascimento = nascimento;
+    }
+
     public Usuario convert() throws ParseException {
         return new Usuario(this.nome,
                             this.email,

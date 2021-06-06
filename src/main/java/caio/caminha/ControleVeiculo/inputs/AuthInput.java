@@ -10,6 +10,12 @@ public class AuthInput {
     @JsonProperty("password")
     private String password;
 
+    public AuthInput(){}
+    public AuthInput(String cpf, String password){
+        this.cpf = cpf;
+        this.password = password;
+    }
+
     public String getCpf() {
         return cpf;
     }

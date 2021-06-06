@@ -16,6 +16,16 @@ public class InputVeiculo {
     @NotNull @NotEmpty
     private String combustivel;
 
+    public InputVeiculo(){}
+
+    public InputVeiculo(String tipo, String marca, String modelo, String ano, String combustivel){
+        this.tipo = tipo;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.ano = ano;
+        this.combustivel = combustivel;
+    }
+
     public Veiculo convert(){
         return new Veiculo(this.marca, Integer.parseInt(this.ano), this.modelo, this.tipo, this.combustivel);
     }
